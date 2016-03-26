@@ -24,15 +24,69 @@
       <section>
         <h3>
         </a>Welcome to the SEED Testing Site</h3>
+        <form>
+  <fieldset class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" placeholder="Enter name">
+    <br>
+    <label for="inputEmail">Email address</label>
+    <input type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+  </fieldset>
+</form>
         <div class="container-fluid">
             <div id="quiz"></div>
         </div>      
+        <form id="foo">
+        <div class="text-center"> 
+          <button type="submit" name="button" class="btn-xlarge btn-primary">Submit</button> 
+        </div>
+        </form>
 
       </section>
     </div>
     
     <script type="text/javascript">
-      var quiz = jQuery('#quiz').quiz('1Zc5izCDFMkQa56E4dZc9JLJSbz2NGUPwFszPpl7xS8Q'); 
+      var quiz = jQuery('#quiz').quiz('1Zc5izCDFMkQa56E4dZc9JLJSbz2NGUPwFszPpl7xS8Q');
+      // Variable to hold request
+      var request;
+
+      // Bind to the submit event of our form
+      $("#foo").submit(function(event){
+          console.log($("#name").val())
+          console.log($("#inputEmail").val())
+          // Abort any pending request
+          if (request) {
+              request.abort();
+          }
+
+          // Serialize the data in the form
+          var serializedData = {test : 1}
+
+          // Fire off the request to /form.php
+          request = $.ajax({
+              url: "https://script.google.com/macros/s/AKfycbwYQpV67oiqhk_tw2zq9wMg-QAEeuBOZWT4rtqG8PIqDeLVWgg/exec",
+              type: "post",
+              data: serializedData
+          });
+
+          // Callback handler that will be called on success
+          request.done(function (response, textStatus, jqXHR){
+              // Log a message to the console
+              console.log("Hooray, it worked!");
+          });
+
+          // Callback handler that will be called on failure
+          request.fail(function (jqXHR, textStatus, errorThrown){
+              // Log the error to the console
+              console.error(
+                  "The following error occurred: "+
+                  textStatus, errorThrown
+              );
+          });
+
+          // Prevent default posting of form
+          event.preventDefault();
+      }); 
     </script>
 		
   </body>
