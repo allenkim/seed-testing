@@ -13,7 +13,8 @@
     
     <script src="js/jquery.js" type="text/javascript"></script>
     <script src="js/tabletop.js" type="text/javascript"></script>
-    <script src="js/script.js" type="text/javascript"></script>
+    <script src="js/quiz.js" type="text/javascript"></script>
+    <script src="js/spreadsheetInfo.js" type="text/javascript"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   </head>
   <body>
@@ -46,25 +47,30 @@
     </div>
     
     <script type="text/javascript">
-      var quiz = jQuery('#quiz').quiz('16Mx2YxGVuKX6D1I08DrqMsosJmESRwVr0-JETX32zgc');
+      // Provide Google Sheets ID and Sheet Name in spreadsheetInfo.js
+      var quiz = jQuery('#quiz').quiz(inputSheetID,inputSheetName);
+
       // Variable to hold request
       var request;
 
       // Bind to the submit event of our form
       $("#foo").submit(function(event){
-          console.log($("#name").val())
-          console.log($("#inputEmail").val())
+          
           // Abort any pending request
           if (request) {
               request.abort();
           }
 
           // Serialize the data in the form
-          var serializedData = {test : 1}
+          var serializedData = {
+            name : $("#name").val(),
+            email: $("#inputEmail").val(),
+            quizID: inputSheetName
+          }
 
           // Fire off the request to /form.php
           request = $.ajax({
-              url: "https://script.google.com/macros/s/AKfycbzC7epNi5Nncxe0vr2RfW4KKm93gEd7g0gZthpYEiZ9VsWVCZo/exec",
+              url: outputSheetLink,
               type: "post",
               data: serializedData
           });
